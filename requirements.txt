@@ -1,0 +1,6 @@
+pytest
+Pillow
+reverse_geocoder
+numpy
+ImageHash
+send2trash

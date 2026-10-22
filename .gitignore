@@ -1,0 +1,13 @@
+sample_photos/
+_sloth_review/
+journal/
+.venv/
+__pycache__/
+.pytest_cache/
+config.toml
+manifest.jsonl
+decisions.jsonl
+*.jsonl
+!eval/
+!eval/*.jsonl
+!eval/**/*.jsonl
