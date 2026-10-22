@@ -1,20 +1,20 @@
 from __future__ import annotations
 
 import json
-import shutil
 from pathlib import Path
+
+from PIL import Image, ImageDraw
 
 from sloth.cli import main
 
 
 def test_run_then_undo_restores_files_byte_for_byte(tmp_path: Path) -> None:
-    repo_root = Path(__file__).resolve().parents[1]
-    source = repo_root / "sample_photos"
     work = tmp_path / "sample_photos"
-    shutil.copytree(source, work)
+    work.mkdir(parents=True, exist_ok=True)
+    _seed_test_photos(work)
 
     baseline = _snapshot_files(work)
-    assert baseline, "sample_photos fixture is empty"
+    assert baseline
 
     run_code = main(["run", "--input-folder", str(work)])
     assert run_code == 0
@@ -57,3 +57,16 @@ def _read_manifest(manifest_path: Path) -> list[dict[str, object]]:
             if isinstance(row, dict):
                 rows.append(row)
     return rows
+
+
+def _seed_test_photos(folder: Path) -> None:
+    base = Image.new("RGB", (1200, 800), color=(220, 220, 220))
+    draw = ImageDraw.Draw(base)
+    draw.rectangle((50, 50, 1150, 750), outline=(0, 0, 0), width=8)
+    draw.line((0, 400, 1200, 400), fill=(30, 30, 30), width=7)
+    draw.ellipse((200, 200, 520, 520), fill=(80, 80, 80))
+
+    original = folder / "original.jpg"
+    base.save(original)
+    base.resize((950, 620), Image.Resampling.LANCZOS).save(folder / "dup.jpg")
+    Image.new("RGB", (600, 400), color=(160, 160, 160)).save(folder / "keep.jpg")
