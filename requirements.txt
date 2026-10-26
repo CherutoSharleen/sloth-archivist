@@ -4,3 +4,5 @@ reverse_geocoder
 numpy
 ImageHash
 send2trash
+pydantic
+ollama

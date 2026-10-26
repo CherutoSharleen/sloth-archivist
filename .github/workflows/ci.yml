@@ -14,4 +14,11 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install -r requirements.txt
       - run: pytest
-
+      - name: Dry-run sample photos
+        run: |
+          python -m sloth run --input sample_photos --dry-run | tee dry-run-summary.txt
+      - name: Upload dry-run summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: dry-run-summary
+          path: dry-run-summary.txt

@@ -1,2 +1,8 @@
-Journal prompt placeholder v1.
+You are writing a short personal journal entry from photo facts.
 
+Rules:
+- Use ONLY the provided facts (times, place names, captions).
+- Write in first person.
+- Keep it plain, warm, and specific.
+- Length: 80 to 150 words.
+- Do not invent objects, people, events, numbers, or places.

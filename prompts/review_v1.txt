@@ -1,2 +1,22 @@
-Review prompt placeholder v1.
+You are reviewing one personal photo.
 
+Return STRICT JSON only that matches the provided schema:
+{
+  "caption": "one factual line, no speculation",
+  "verdict": "keep|junk|needs_review",
+  "reason": "short reason",
+  "confidence": 0.0-1.0
+}
+
+Decision policy:
+- Mark "junk" only for:
+  1) throwaway screenshots (one-time codes, transient error messages already resolved, memes),
+  2) accidental shots (pocket, floor, blank/near-blank),
+  3) near-useless photos with no meaningful information.
+- Mark "keep" for anything that may matter later: people, places, food, events, or documents someone may need.
+- Mark "needs_review" whenever uncertain.
+
+Caption rules:
+- One line only.
+- Factual and concise.
+- Describe visible content without guessing context.

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sloth Archivist · Python + ML Walkthrough</title>
+  <style>
+    :root{
+      --bg:#f4f8f3;
+      --card:#ffffff;
+      --ink:#243128;
+      --muted:#5b6c5f;
+      --line:#d6e3d5;
+      --accent:#5d8a66;
+      --accent-soft:#e6f1e7;
+      --warn:#fff7e0;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.45;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    .hero{
+      background:linear-gradient(120deg,#e9f3ea,#f9fcf8);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px;
+      margin-bottom:14px;
+    }
+    h1,h2,h3{margin:.2rem 0 .6rem}
+    .muted{color:var(--muted)}
+    .grid{display:grid;gap:12px}
+    .grid.two{grid-template-columns:1fr}
+    @media (min-width:900px){.grid.two{grid-template-columns:1fr 1fr}}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+    }
+    code,.pill{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      background:#edf3ec;
+      border-radius:6px;
+      padding:2px 6px;
+      font-size:.9em;
+    }
+    .pill{display:inline-block}
+    .kbd{
+      border:1px solid #cbd8ca;
+      border-bottom-width:2px;
+      border-radius:6px;
+      padding:1px 6px;
+      background:#fff;
+      font-family:ui-monospace,monospace;
+      font-size:.85em;
+    }
+    details{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px 12px;
+      background:#fff;
+      margin:10px 0;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:600;
+      color:#315037;
+    }
+    .flow{
+      border:1px dashed #b8cdb9;
+      border-radius:10px;
+      padding:10px;
+      background:#fbfdfb;
+      overflow:auto;
+    }
+    .flow pre{
+      margin:0;
+      font-size:.92rem;
+      line-height:1.35;
+      color:#27412d;
+    }
+    .warn{
+      background:var(--warn);
+      border:1px solid #ebd8a3;
+      border-radius:10px;
+      padding:10px;
+      margin:8px 0;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:.93rem;
+    }
+    th,td{
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      padding:8px 6px;
+      vertical-align:top;
+    }
+    th{color:#33543a}
+    .toc a{
+      color:#2c6040;
+      text-decoration:none;
+    }
+    .toc li{margin:4px 0}
+    .badge{
+      display:inline-block;
+      border-radius:999px;
+      padding:2px 8px;
+      background:var(--accent-soft);
+      border:1px solid #c4dcc7;
+      color:#2e5a37;
+      font-size:.8rem;
+    }
+    .footer{
+      margin:18px 0 8px;
+      color:#5e7262;
+      font-size:.92rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Sloth Archivist: Python + ML/AI Walkthrough</h1>
+      <p class="muted">
+        Interactive architecture guide for the current implementation:
+        image ingestion, rule filters, Gemma/Ollama review, journaling, fact-check, and reporting.
+      </p>
+      <p>
+        <span class="badge">Offline-first</span>
+        <span class="badge">Python CLI</span>
+        <span class="badge">Ollama + Gemma</span>
+      </p>
+    </header>
+
+    <section class="card toc">
+      <h2>Quick navigation</h2>
+      <ol>
+        <li><a href="#pipeline">Pipeline map</a></li>
+        <li><a href="#python-structure">Python module structure</a></li>
+        <li><a href="#rules">Rule engine (classical CV heuristics)</a></li>
+        <li><a href="#gemma">Gemma inference path (LLM vision loop)</a></li>
+        <li><a href="#journal">Journal generation + fact-check</a></li>
+        <li><a href="#artifacts">Artifacts and data contracts</a></li>
+        <li><a href="#observability">Run summary, eval, and report generation</a></li>
+      </ol>
+    </section>
+
+    <section id="pipeline" class="card">
+      <h2>1) End-to-end pipeline map</h2>
+      <div class="flow">
+<pre>python -m sloth run --input &lt;folder&gt; [--dry-run]
+    ├─ discover_images()           (ingest.py)
+    │    ├─ include: jpg/jpeg/png
+    │    ├─ skip: _sloth_review/, manifest-tracked files
+    │    └─ warn: heic/heif
+    │
+    ├─ filter_images()             (filters.py)
+    │    ├─ near-duplicates via phash distance
+    │    ├─ blur via Laplacian variance
+    │    ├─ dark/overexposed via grayscale mean
+    │    └─ screenshot flag only (not auto-junk)
+    │
+    ├─ review_survivors()          (review.py -> gemma.py)
+    │    ├─ only rule survivors go to Gemma
+    │    ├─ JSON schema-enforced response
+    │    ├─ retries on invalid output
+    │    └─ fallback: needs_review
+    │
+    ├─ decisions.jsonl append      (rules + gemma for every photo)
+    ├─ move_to_review()            (mover.py, stage=rules/gemma)
+    ├─ build_journal_from_run()    (journal.py + factcheck.py)
+    ├─ latest_run.json snapshot
+    └─ summary line output</pre>
+      </div>
+      <p class="muted">
+        Dry-run mode avoids file moves and still computes decision summaries.
+      </p>
+    </section>
+
+    <section id="python-structure" class="grid two">
+      <article class="card">
+        <h2>2) Python architecture by responsibility</h2>
+        <table>
+          <thead><tr><th>Module</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td><code>sloth/cli.py</code></td><td>Entry command router, run orchestration, summary output.</td></tr>
+            <tr><td><code>sloth/ingest.py</code></td><td>File discovery + manifest-aware skipping.</td></tr>
+            <tr><td><code>sloth/filters.py</code></td><td>Heuristic triage: duplicate, blur, brightness, screenshot flag.</td></tr>
+            <tr><td><code>sloth/gemma.py</code></td><td>Ollama chat wrapper, schema validation, retries, timing.</td></tr>
+            <tr><td><code>sloth/review.py</code></td><td>Prompt loading, survivor review, decisions record creation.</td></tr>
+            <tr><td><code>sloth/mover.py</code></td><td>Move/undo/recycle-bin lifecycle + manifest append.</td></tr>
+            <tr><td><code>sloth/journal.py</code></td><td>Day/place grouping, draft + retry + template fallback, markdown emit.</td></tr>
+            <tr><td><code>sloth/factcheck.py</code></td><td>Unsupported token detection against facts + allow-list.</td></tr>
+            <tr><td><code>sloth/report.py</code></td><td>Self-contained HTML report + local thumbnails.</td></tr>
+            <tr><td><code>eval/eval.py</code></td><td>Offline benchmark metrics + EVAL.md tracking.</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h2>Execution model</h2>
+        <ul>
+          <li><strong>Deterministic rules first:</strong> fast and explainable pruning.</li>
+          <li><strong>LLM second:</strong> only on survivors to reduce token/runtime cost.</li>
+          <li><strong>Audit trail always:</strong> per-photo decision rows regardless of path.</li>
+          <li><strong>No destructive delete:</strong> move + undo supports reversible workflow.</li>
+        </ul>
+        <div class="warn">
+          <strong>Important:</strong> local inference speed depends on Ollama availability/model load.
+          For CI and offline smoke tests, fake/heuristic paths avoid hard blocking.
+        </div>
+      </article>
+    </section>
+
+    <section id="rules" class="card">
+      <h2>3) Classical rule engine details (non-LLM)</h2>
+      <details open>
+        <summary>Duplicate detection with perceptual hash</summary>
+        <p>
+          Uses <code>imagehash.phash</code> and configurable Hamming distance
+          (<code>duplicate_hash_distance</code>). Connected duplicates form groups; the
+          sharpest image is kept, others become <span class="pill">junk: duplicate</span>.
+        </p>
+      </details>
+      <details>
+        <summary>Blur detection with Laplacian variance</summary>
+        <p>
+          Converts to grayscale, resizes to 512px, computes Laplacian variance.
+          Below threshold =&gt; <span class="pill">blurry</span>.
+        </p>
+      </details>
+      <details>
+        <summary>Brightness heuristics</summary>
+        <p>
+          Mean grayscale intensity below dark threshold =&gt; <span class="pill">dark</span>;
+          above bright threshold =&gt; <span class="pill">overexposed</span>.
+        </p>
+      </details>
+      <details>
+        <summary>Screenshot marker</summary>
+        <p>
+          PNG + filename/dimensions pattern sets <code>is_screenshot=True</code> but does
+          <em>not</em> force junk. That decision is deferred to Gemma policy.
+        </p>
+      </details>
+    </section>
+
+    <section id="gemma" class="card">
+      <h2>4) ML/AI core: Gemma through Ollama</h2>
+      <details open>
+        <summary>Inference contract</summary>
+        <ul>
+          <li>Image resized to configured size (default <code>768</code>).</li>
+          <li><code>ollama.chat(..., options={"temperature": 0})</code>.</li>
+          <li><code>format=</code> Pydantic JSON schema (strict output structure).</li>
+          <li>Response validated before use.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Reliability path (invalid JSON/schema mismatch)</summary>
+        <ol>
+          <li>Attempt request.</li>
+          <li>If parse/validation fails, retry (up to 2 retries).</li>
+          <li>If still failing: return <code>needs_review</code> fallback record.</li>
+        </ol>
+      </details>
+      <details>
+        <summary>Latency tracking</summary>
+        <p>
+          Per-call durations are collected and aggregated into
+          <code>seconds</code> for each decision, then surfaced into run summaries/eval.
+        </p>
+      </details>
+      <details>
+        <summary>Environment toggles</summary>
+        <ul>
+          <li><code>OLLAMA_HOST</code>: custom Ollama endpoint.</li>
+          <li><code>SLOTH_FAKE_GEMMA=1</code>: local heuristic review path (CI/smoke mode).</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="journal" class="card">
+      <h2>5) Journal generation + fact-check</h2>
+      <div class="flow">
+<pre>kept photos
+  └─ group by date
+      └─ group by place
+          └─ facts payload (time, place, captions only)
+              └─ Gemma draft (80-150 words, first person)
+                   ├─ factcheck pass     -> status=pass
+                   ├─ fail + retry once  -> status=retried (if pass)
+                   └─ fail again         -> status=template fallback</pre>
+      </div>
+      <p>
+        Output files are written to <code>journal/YYYY-MM-DD.md</code>, and status events are
+        logged in <code>journal/journal_log.jsonl</code>.
+      </p>
+    </section>
+
+    <section id="artifacts" class="card">
+      <h2>6) Key data artifacts</h2>
+      <table>
+        <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>manifest.jsonl</code></td><td>Move events for undo/recovery (rules+gemma stages).</td></tr>
+          <tr><td><code>decisions.jsonl</code></td><td>Per-photo decision row (stage, verdict, reason, model, prompt version, seconds).</td></tr>
+          <tr><td><code>latest_run.json</code></td><td>Run summary used by reporting layer.</td></tr>
+          <tr><td><code>journal/*.md</code></td><td>Daily narrative output with linked photos.</td></tr>
+          <tr><td><code>docs/report.html</code></td><td>Self-contained viewer for summary + review + journal.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="observability" class="grid two">
+      <article class="card">
+        <h2>7) Operational commands</h2>
+        <p><span class="kbd">Dry run summary</span></p>
+        <p><code>python -m sloth run --input sample_photos_copy --dry-run</code></p>
+        <p><span class="kbd">Full run (moves + journal)</span></p>
+        <p><code>python -m sloth run --input sample_photos_copy</code></p>
+        <p><span class="kbd">Build report</span></p>
+        <p><code>python -m sloth report --input sample_photos_copy --out docs</code></p>
+        <p><span class="kbd">Undo</span></p>
+        <p><code>python -m sloth undo --run &lt;run_id&gt; --input sample_photos_copy</code></p>
+      </article>
+
+      <article class="card">
+        <h2>8) AI/ML quality controls in this design</h2>
+        <ul>
+          <li><strong>Schema validation:</strong> constrains LLM output surface.</li>
+          <li><strong>Retry budget:</strong> limits malformed output loops.</li>
+          <li><strong>Fact-check gate:</strong> blocks unsupported journal claims.</li>
+          <li><strong>Template fallback:</strong> guarantees non-empty output even under model failure.</li>
+          <li><strong>Evaluation script:</strong> tracks precision/recall and decision-source split.</li>
+        </ul>
+      </article>
+    </section>
+
+    <p class="footer">
+      Tip: open this file alongside <code>docs/report.html</code> to compare architecture intent vs actual run outputs.
+    </p>
+  </div>
+</body>
+</html>
