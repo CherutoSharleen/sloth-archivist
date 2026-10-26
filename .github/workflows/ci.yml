@@ -13,10 +13,13 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -r requirements.txt
-      - run: pytest
-      - name: Dry-run sample photos
+      - run: python -m pip install pytest
+      - run: python -m pytest
+      - name: Dry-run fixture photos
+        env:
+          SLOTH_FAKE_GEMMA: "1"
         run: |
-          python -m sloth run --input sample_photos --dry-run | tee dry-run-summary.txt
+          python -m sloth run --input tests/fixtures/real --dry-run | tee dry-run-summary.txt
       - name: Upload dry-run summary
         uses: actions/upload-artifact@v4
         with:

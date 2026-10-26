@@ -1,4 +1,4 @@
-# Sloth Archivist
+﻿# Sloth Archivist
 
 [See an example](docs/report.html)
 
@@ -109,7 +109,7 @@ python -m sloth eval --input <folder> --labels eval/labels.csv [--model <name>]
 `run --dry-run` prints a compact run summary:
 
 ```text
-N photos · X junk by rules · Y junk by Gemma · Z needs review · K kept · S s/photo
+N photos Â· X junk by rules Â· Y junk by Gemma Â· Z needs review Â· K kept Â· S s/photo
 ```
 
 ## Data files written by the pipeline
@@ -158,3 +158,22 @@ This repository contains a working baseline for:
 For a guided architecture overview, open:
 
 - `docs/python-ml-walkthrough.html`
+
+## Stress test asset rebuild
+
+Rebuild the reproducible real-world stress set locally (seed 42):
+
+`ash
+python scripts/fetch_stress_assets.py
+python scripts/make_stress_variants.py
+python -m sloth eval --labels eval/labels_real.csv --input stress_assets/real/set
+` 
+
+Committed metadata and credits:
+- stress_assets/real/SOURCES.csv`r
+- stress_assets/real/ATTRIBUTION.md`r
+
+Large generated folders are intentionally ignored by git:
+- stress_assets/real/originals/`r
+- stress_assets/real/set/`r
+

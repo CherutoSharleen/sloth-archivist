@@ -1,14 +1,9 @@
-Title  
-Sloth Archivist: Gemma sorts your camera roll and writes your diary while you sleep
-
-Published  
-false
-
-Tags  
-devchallenge, hf26challenge, opensource, ai
-
-Cover_image  
-https://raw.githubusercontent.com/CherutoSharleen/sloth-archivist/main/docs/report_assets/0001.jpg
+---
+title: "Sloth Archivist: Gemma sorts your camera roll and writes your diary while you sleep"
+published: false
+tags: devchallenge, hf26challenge, opensource, ai
+cover_image: stress_assets/cover_sloth_archivist.jpg
+---
 
 This is a submission for the Hacktoberfest Open-Source AI Challenge Week 3: Slow and Steady
 
@@ -21,7 +16,7 @@ My camera folders fill up faster than I can clean them. On the sample run in thi
 
 It never deletes files during triage. Every move is logged in `manifest.jsonl`, and `undo` restores files by run ID.
 
-![Before/after sample flow](report_assets/0002.jpg)
+![Stress-case base image](stress_assets/stress_duplicate_base.jpg)
 
 This project is for anyone with a camera roll they have postponed sorting and a journal they never started.
 
@@ -32,7 +27,7 @@ Sample report in this repository: `docs/report.html` from an 18-photo run.
 
 Demo video: coming soon.
 
-![Sample output thumbnail](report_assets/0003.jpg)
+![Current report screenshot](stress_assets/sloth_report_screenshot.png)
 
 ## Code
 
@@ -56,6 +51,32 @@ phone camera -> laptop inbox
 ```
 
 I built and tested this on Windows with local Python and Ollama. The default model is `gemma3:4b`, image size is 768px, and decoding uses `temperature: 0` for deterministic outputs.
+
+## Synthetic stress-case image set (no personal photos)
+
+To avoid personal data in the article and screenshots, this draft uses synthetic images that target specific failure/edge modes:
+
+- `stress_duplicate_base.jpg` and `stress_duplicate_variant.jpg` (near-duplicate pair)
+- `stress_blurry.jpg` (high blur)
+- `stress_dark.jpg` (underexposed/noisy)
+- `stress_overexposed.jpg` (overexposed scene)
+- `Screenshot_stress_throwaway.png` (throwaway screenshot scenario)
+- `stress_document_keep.jpg` (document someone may need later)
+
+### Duplicate pair
+![Duplicate base](stress_assets/stress_duplicate_base.jpg)
+![Duplicate variant](stress_assets/stress_duplicate_variant.jpg)
+
+### Quality stress cases
+![Blurry stress case](stress_assets/stress_blurry.jpg)
+![Dark stress case](stress_assets/stress_dark.jpg)
+![Overexposed stress case](stress_assets/stress_overexposed.jpg)
+
+### Screenshot stress case
+![Throwaway screenshot case](stress_assets/Screenshot_stress_throwaway.png)
+
+### Keep-worthy document case
+![Keep-worthy document case](stress_assets/stress_document_keep.jpg)
 
 ## Cheap filters first
 
@@ -93,7 +114,7 @@ The facts do not mention: bicycles, 3
 
 In the sample run currently checked into the repo, the day-level status was `template`, which means the fallback path worked as designed.
 
-![Journal/report sample](report_assets/0004.jpg)
+![Journal/report sample](stress_assets/sloth_report_screenshot.png)
 
 ## Prompt versions on labeled photos
 
@@ -143,7 +164,7 @@ I documented architecture and flow in:
 
 That page maps each Python module, the ML inference path, retries, and data artifacts end to end.
 
-![Architecture/output sample](report_assets/0005.jpg)
+![Architecture/output sample](stress_assets/sloth_report_screenshot.png)
 
 ## The Lazy Payoff
 

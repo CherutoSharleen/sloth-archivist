@@ -1,4 +1,4 @@
-sample_photos/
+﻿sample_photos/
 _sloth_review/
 journal/
 .venv/
@@ -11,3 +11,5 @@ decisions.jsonl
 !eval/
 !eval/*.jsonl
 !eval/**/*.jsonl
+stress_assets/real/originals/
+stress_assets/real/set/

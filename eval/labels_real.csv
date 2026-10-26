@@ -1,0 +1,101 @@
+file,label,expected_reason,note
+keep_city_01.jpg,keep,keep,wikimedia original
+keep_city_02.jpg,keep,keep,wikimedia original
+keep_city_03.jpg,keep,keep,wikimedia original
+keep_city_04.jpg,keep,keep,wikimedia original
+keep_city_05.jpg,keep,keep,wikimedia original
+keep_city_06.jpg,keep,keep,wikimedia original
+keep_city_07.jpg,keep,keep,wikimedia original
+keep_city_08.jpg,keep,keep,wikimedia original
+keep_document_01.jpg,keep,keep,wikimedia original
+keep_document_02.jpg,keep,keep,wikimedia original
+keep_document_03.jpg,keep,keep,wikimedia original
+keep_document_04.jpg,keep,keep,wikimedia original
+keep_document_05.jpg,keep,keep,wikimedia original
+keep_food_01.jpg,keep,keep,wikimedia original
+keep_food_02.jpg,keep,keep,wikimedia original
+keep_food_03.jpg,keep,keep,wikimedia original
+keep_food_04.jpg,keep,keep,wikimedia original
+keep_food_05.jpg,keep,keep,wikimedia original
+keep_food_06.jpg,keep,keep,wikimedia original
+keep_food_07.jpg,keep,keep,wikimedia original
+keep_landscape_01.jpg,keep,keep,wikimedia original
+keep_landscape_02.jpg,keep,keep,wikimedia original
+keep_landscape_03.jpg,keep,keep,wikimedia original
+keep_landscape_04.jpg,keep,keep,wikimedia original
+keep_landscape_05.jpg,keep,keep,wikimedia original
+keep_landscape_06.jpg,keep,keep,wikimedia original
+keep_landscape_07.jpg,keep,keep,wikimedia original
+keep_landscape_08.jpg,keep,keep,wikimedia original
+keep_landscape_09.jpg,keep,keep,wikimedia original
+keep_landscape_10.jpg,keep,keep,wikimedia original
+keep_market_01.jpg,keep,keep,wikimedia original
+keep_market_02.jpg,keep,keep,wikimedia original
+keep_market_03.jpg,keep,keep,wikimedia original
+keep_market_04.jpg,keep,keep,wikimedia original
+keep_market_05.jpg,keep,keep,wikimedia original
+keep_market_06.jpg,keep,keep,wikimedia original
+keep_market_07.jpg,keep,keep,wikimedia original
+keep_water_01.jpg,keep,keep,wikimedia original
+keep_water_02.jpg,keep,keep,wikimedia original
+keep_water_03.jpg,keep,keep,wikimedia original
+keep_water_04.jpg,keep,keep,wikimedia original
+keep_water_05.jpg,keep,keep,wikimedia original
+keep_water_06.jpg,keep,keep,wikimedia original
+keep_water_07.jpg,keep,keep,wikimedia original
+keep_water_08.jpg,keep,keep,wikimedia original
+variant_duplicate_burst1_01.jpg,junk,duplicate,burst set 1
+variant_duplicate_burst1_02.jpg,junk,duplicate,burst set 1
+variant_duplicate_burst1_03.jpg,junk,duplicate,burst set 1
+variant_duplicate_burst2_01.jpg,junk,duplicate,burst set 2
+variant_duplicate_burst2_02.jpg,junk,duplicate,burst set 2
+variant_duplicate_burst2_03.jpg,junk,duplicate,burst set 2
+variant_duplicate_burst3_01.jpg,junk,duplicate,burst set 3
+variant_duplicate_burst3_02.jpg,junk,duplicate,burst set 3
+variant_duplicate_burst3_03.jpg,junk,duplicate,burst set 3
+variant_duplicate_10.jpg,junk,duplicate,near duplicate
+variant_duplicate_11.jpg,junk,duplicate,near duplicate
+variant_duplicate_12.jpg,junk,duplicate,near duplicate
+variant_blurry_01.jpg,junk,blurry,gaussian blur
+variant_blurry_02.jpg,junk,blurry,gaussian blur
+variant_blurry_03.jpg,junk,blurry,gaussian blur
+variant_blurry_04.jpg,junk,blurry,gaussian blur
+variant_blurry_05.jpg,junk,blurry,gaussian blur
+variant_blurry_06.jpg,junk,blurry,gaussian blur
+variant_blurry_07.jpg,junk,blurry,gaussian blur
+variant_blurry_08.jpg,junk,blurry,gaussian blur
+variant_blurry_09.jpg,junk,blurry,gaussian blur
+variant_blurry_10.jpg,junk,blurry,gaussian blur
+variant_dark_01.jpg,junk,dark,underexposed + noise
+variant_dark_02.jpg,junk,dark,underexposed + noise
+variant_dark_03.jpg,junk,dark,underexposed + noise
+variant_dark_04.jpg,junk,dark,underexposed + noise
+variant_dark_05.jpg,junk,dark,underexposed + noise
+variant_dark_06.jpg,junk,dark,underexposed + noise
+variant_dark_07.jpg,junk,dark,underexposed + noise
+variant_dark_08.jpg,junk,dark,underexposed + noise
+variant_overexposed_01.jpg,junk,overexposed,overexposed scene
+variant_overexposed_02.jpg,junk,overexposed,overexposed scene
+variant_overexposed_03.jpg,junk,overexposed,overexposed scene
+variant_overexposed_04.jpg,junk,overexposed,overexposed scene
+variant_overexposed_05.jpg,junk,overexposed,overexposed scene
+variant_overexposed_06.jpg,junk,overexposed,overexposed scene
+variant_accidental_01.jpg,junk,accidental,pocket shot
+variant_accidental_02.jpg,junk,accidental,pocket shot
+variant_accidental_03.jpg,junk,accidental,pocket shot
+variant_accidental_04.jpg,junk,accidental,pocket shot
+Screenshot_otp_code_01.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_error_resolved_02.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_loading_spinner_03.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_download_toast_04.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_meme_fake_text_05.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_auth_token_06.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_timeout_error_07.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_verification_code_08.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_network_retry_09.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_session_expired_10.png,junk,screenshot_throwaway,throwaway screenshot
+Screenshot_boarding_pass_01.png,keep,keep,keep-worthy screenshot
+Screenshot_train_ticket_qr_02.png,keep,keep,keep-worthy screenshot
+Screenshot_delivery_address_03.png,keep,keep,keep-worthy screenshot
+Screenshot_booking_reference_04.png,keep,keep,keep-worthy screenshot
+Screenshot_saved_map_pin_05.png,keep,keep,keep-worthy screenshot
